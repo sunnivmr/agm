@@ -76,7 +76,7 @@ function loadScene() {
 	var fontLoader = new THREE.FontLoader();
 	fontLoader.load('font/gentilis_bold.typeface.json',
 					function (font) {
-						var geoTextio = new THREE.TextGeometry('MARIO',
+						var geoTexto = new THREE.TextGeometry('MARIO',
 							{
 								size: 0.5,
 								height: 0.1,
@@ -87,22 +87,31 @@ function loadScene() {
 								bevelSize: 0.04,
 								bevelEnabled: true
 							});
-						var matTexto = new THREE.MeshBasicMaterial({color: red});
+						var matTexto = new THREE.MeshBasicMaterial({color: 'red'});
 						var texto = new THREE.Mesh(geoTexto, matTexto);
 						scene.add(texto);
+						texto.position.x = -1;
 					});
 
 	// Grafo
-	scene.add(esfera);
-	scene.add(cubo);
+	conjunto.add(cubo);;
+	cubo.add(esfera);
 	scene.add(conjunto);
 	scene.add(new THREE.AxesHelper(3));
 	scene.add(suelo);
 
 }
 
+function update() {
+	// Cambiar propiedades entre frames
+	angulo += Math.PI/100;
+	esfera.rotation.y = angulo;
+	conjunto.rotation.y = angulo/10;
+}
+
 function render() {
 	// Blucle de refresco
 	requestAnimationFrame(render);
+	update();
 	renderer.render(scene, camera);
 }
