@@ -43,7 +43,7 @@ function init() {
 	camera.lookAt(new THREE.Vector3(0,0,0));
 
 	// Control de camara
-	cameraControls = new THREE.OrbitCOntrols(camera, renderer.domElement);
+	cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
 	cameraControls.target.set(0, 0, 0);
 	cameraControls.noZoom = false;
 
