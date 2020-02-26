@@ -156,6 +156,11 @@ function setupGUI {
 	// Interfaz
 	var gui = new dat.GUI();
 	var folder = gui.addFolder("Interfaz Mario World");
+	folder.add(effectControls, "mensaje").name("App");
+	folder.add(effectControls, "posY", 1.0, 3.0, 0.1).name("Subdir/Bajar");
+	folder.add(effectControls, "separacion", {Ninguna:0, Media:1, Maxima:2}).name("Separacion");
+	folder.add(effectControls, "caja").name("Ver a Mario");
+	folder.addColor(effectControls, "color").name("Color esfera");
 }
 
 function update() {
