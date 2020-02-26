@@ -155,12 +155,12 @@ function setupGUI {
 
 	// Interfaz
 	var gui = new dat.GUI();
-	var folder = gui.addFolder("Interfaz Mario World");
-	folder.add(effectControls, "mensaje").name("App");
-	folder.add(effectControls, "posY", 1.0, 3.0, 0.1).name("Subdir/Bajar");
-	folder.add(effectControls, "separacion", {Ninguna:0, Media:1, Maxima:2}).name("Separacion");
-	folder.add(effectControls, "caja").name("Ver a Mario");
-	folder.addColor(effectControls, "color").name("Color esfera");
+	var folder = gui.addFolder("Interfaz Mario World"); // Name of the animation 
+	folder.add(effectControls, "mensaje").name("App"); // Message of the animation
+	folder.add(effectControls, "posY", 1.0, 3.0, 0.1).name("Subir/Bajar"); // Rise and lower the animation
+	folder.add(effectControls, "separacion", {Ninguna:0, Media:1, Maxima:2}).name("Separacion"); // Three levels of separacion between two objects
+	folder.add(effectControls, "caja").name("Ver a Mario"); // Can we see Mario in the cube or not
+	folder.addColor(effectControls, "color").name("Color esfera"); // Change the color of the sphere
 }
 
 function update() {
