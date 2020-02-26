@@ -111,7 +111,15 @@ function loadScene() {
 
 function update() {
 	// Cambiar propiedades entre frames
-	angulo += Math.PI/100;
+
+	// Tiempo transcurrido
+	var ahora = Date.now();
+
+	// Incremento de 20 grados por segundo
+	angulo += Math.PI/9 * (ahora - antes)/1000;
+	antes = ahora;
+
+	
 	esfera.rotation.y = angulo;
 	conjunto.rotation.y = angulo/10;
 }
