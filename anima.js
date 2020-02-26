@@ -139,6 +139,11 @@ function updateAspectRatio() {
 
 	// Hay que actualizar la matriz de proyeccion
 	camera.updateProjectionMatrix();
+}
+
+function setupGUI {
+	// Interfaz grafica de usuario
+}
 
 function update() {
 	// Cambiar propiedades entre frames
