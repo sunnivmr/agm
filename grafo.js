@@ -1,33 +1,23 @@
 /*
 ** Seminario 1: Grafo de escena
 ** @autor: Sunniva Mathea Runde
-** @dependencies: OrbitCOntrols.js, Tween.js, dat.gui.min.js
 */
 
 // Variables globales estandar
 var renderer, scene, camera;
 
-// Objetos
-var esfera, conjunto, cubo;
+// Otras variables
+var angulo = 0;
+var esfera;
+var conjunto;
 
-// Control
-var cameraControls, effectControls;
-
-// Temporales
-var angulo: 0;
-var antes = Date.now();
-
-
-// Acciones
 init();
 loadScene();
-setupGUI();
 render();
 
 function init() {
 	// Funcion de init de motor, escena y camara
 
-	// Motor de render
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.setClearColor(new THREE.Color(0x000000));
@@ -38,19 +28,9 @@ function init() {
 
 	// Camara
 	var aspectRatio = window.innerWidth/window.innerHeight;
-	camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 100); // Perspectiva
-	// camera = new THREE.OrthographicCamera(-10, 10, 10/aspectRatio, -10/aspectRatio, 0.1, 100); // Orthographic
-	camera.position.set(0.5, 2, 5); 
+	camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 100);
+	camera.position.set(0.5, 2, 5);
 	camera.lookAt(new THREE.Vector3(0,0,0));
-
-	// Control de camara
-	cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
-	cameraControls.target.set(0, 0, 0);
-	cameraControls.noZoom = false;
-
-
-	//Atender al eventos
-	window.addEventListener('resize', updateAspectRatio);
 
 }
 
@@ -68,7 +48,7 @@ function loadScene() {
 	// Cubo
 	var geoCubo = new THREE.BoxGeometry(2, 2, 2);
 	var geoMat = new THREE.MeshBasicMaterial({color: 'green', wireframe: true});
-	cubo = new THREE.Mesh(geoCubo, geoMat);
+	var cubo = new THREE.Mesh(geoCubo, geoMat);
 	cubo.position.x = 2;
 
 	// Esfera
@@ -115,42 +95,16 @@ function loadScene() {
 
 	// Grafo
 	conjunto.add(cubo);;
-	conjunto.add(esfera);
+	cubo.add(esfera);
 	scene.add(conjunto);
 	scene.add(new THREE.AxesHelper(3));
 	scene.add(suelo);
 
 }
 
-function updateAspectRatio() {
-	// Mantener øa reøacopm de aspecto entre marco y camara
-
-	var aspectRatio = window.innerWidth/window.innerHeight;
-
-	// Renovar medidas de viewport
-	renderer.setSize(window.innerWidth, window.innerHeight);
-
-	// Para la perspectiva
-	camera.aspect = aspectRatio;
-
-	// Para la ortografica
-	// camera.top = 10/aspectRatio;
-	// camera.bottom = -10/aspectRatio;
-
-	// Hay que actualizar la matriz de proyeccion
-	camera.updateProjectionMatrix();
-
 function update() {
 	// Cambiar propiedades entre frames
-
-	// Tiempo transcurrido
-	var ahora = Date.now();
-
-	// Incremento de 20 grados por segundo
-	angulo += Math.PI/9 * (ahora - antes)/1000;
-	antes = ahora;
-
-
+	angulo += Math.PI/100;
 	esfera.rotation.y = angulo;
 	conjunto.rotation.y = angulo/10;
 }

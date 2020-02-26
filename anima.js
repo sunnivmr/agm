@@ -143,6 +143,13 @@ function updateAspectRatio() {
 
 function setupGUI {
 	// Interfaz grafica de usuario
+
+	// Controles
+	effectControls = {
+		mensaje: 'Interfaz';
+		posY 1.0,
+		separacion = [],
+	}
 }
 
 function update() {
