@@ -146,10 +146,14 @@ function setupGUI {
 
 	// Controles
 	effectControls = {
-		mensaje: 'Interfaz';
+		mensaje: "Interfaz";
 		posY 1.0,
 		separacion = [],
-	}
+		caja: true,
+		color: "rgb(255, 255, 0)"
+	};
+
+	
 }
 
 function update() {
