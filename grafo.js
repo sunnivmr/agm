@@ -23,7 +23,6 @@ render();
 function init() {
 	// Funcion de init de motor, escena y camara
 
-
 	// Motor de render
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -35,8 +34,9 @@ function init() {
 
 	// Camara
 	var aspectRatio = window.innerWidth/window.innerHeight;
-	camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 100);
-	camera.position.set(0.5, 2, 5);
+	//camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 100); // Perspectiva
+	camera = new THREE.OrthographicCamera(-10, 10, 10/aspectRatio, -10/aspectRatio, 0.1, 100); // Orthographic
+	camera.position.set(0.5, 2, 5); 
 	camera.lookAt(new THREE.Vector3(0,0,0));
 
 }
@@ -119,7 +119,7 @@ function update() {
 	angulo += Math.PI/9 * (ahora - antes)/1000;
 	antes = ahora;
 
-	
+
 	esfera.rotation.y = angulo;
 	conjunto.rotation.y = angulo/10;
 }
