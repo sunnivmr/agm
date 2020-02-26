@@ -147,8 +147,8 @@ function setupGUI {
 	// Controles
 	effectControls = {
 		mensaje: "Interfaz";
-		posY 1.0,
-		separacion = [],
+		posY: 1.0,
+		separacion: = [],
 		caja: true,
 		color: "rgb(255, 255, 0)"
 	};
@@ -176,6 +176,12 @@ function update() {
 
 	esfera.rotation.y = angulo;
 	conjunto.rotation.y = angulo/10;
+
+	// Cambio por demanda de usuario
+	conjunto.position.y = effectControls.posY; // PosY refers to the posY of everything
+	esfera.position.x = effectControls.separacion; // Separacion refers to the x-position of the sphere
+	cubo.visible = effectControls.caja;  // Caja refers to if the cube is visible or not
+	esfera.material.setValues({color: effectControls.color}); // Color refers to color og sphere
 }
 
 function render() {
