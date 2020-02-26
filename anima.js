@@ -153,7 +153,9 @@ function setupGUI {
 		color: "rgb(255, 255, 0)"
 	};
 
-	
+	// Interfaz
+	var gui = new dat.GUI();
+	var folder = gui.addFolder("Interfaz Mario World");
 }
 
 function update() {
