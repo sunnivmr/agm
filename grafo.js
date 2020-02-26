@@ -1,16 +1,21 @@
 /*
 ** Seminario 1: Grafo de escena
 ** @autor: Sunniva Mathea Runde
+** @dependencies: OrbitCOntrols.js, Tween.js, dat.gui.min.js
 */
 
 // Variables globales estandar
 var renderer, scene, camera;
 
-// Otras variables
-var angulo = 0;
-var esfera;
-var conjunto;
+// Objetos
+var esfera, conjunto, cubo;
 
+// Temporales
+var angulo: 0;
+var antes = Date.now();
+
+
+// Acciones
 init();
 loadScene();
 render();
@@ -18,6 +23,8 @@ render();
 function init() {
 	// Funcion de init de motor, escena y camara
 
+
+	// Motor de render
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.setClearColor(new THREE.Color(0x000000));
@@ -48,7 +55,7 @@ function loadScene() {
 	// Cubo
 	var geoCubo = new THREE.BoxGeometry(2, 2, 2);
 	var geoMat = new THREE.MeshBasicMaterial({color: 'green', wireframe: true});
-	var cubo = new THREE.Mesh(geoCubo, geoMat);
+	cubo = new THREE.Mesh(geoCubo, geoMat);
 	cubo.position.x = 2;
 
 	// Esfera
@@ -95,7 +102,7 @@ function loadScene() {
 
 	// Grafo
 	conjunto.add(cubo);;
-	cubo.add(esfera);
+	conjunto.add(esfera);
 	scene.add(conjunto);
 	scene.add(new THREE.AxesHelper(3));
 	scene.add(suelo);
