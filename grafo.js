@@ -119,6 +119,13 @@ function updateAspectRatio() {
 
 	// Renovar medidas de viewport
 	renderer.setSize(window.innerWidth, window.innerHeight);
+
+	// Para la perspectiva
+	camera.aspect = aspectRatio;
+
+	// Para la ortografica
+	// camera.top = 10/aspectRatio;
+	// camera.bottom = -10/aspectRatio;
 }
 
 function update() {
