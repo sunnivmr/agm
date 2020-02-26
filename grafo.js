@@ -126,7 +126,9 @@ function updateAspectRatio() {
 	// Para la ortografica
 	// camera.top = 10/aspectRatio;
 	// camera.bottom = -10/aspectRatio;
-}
+
+	// Hay que actualizar la matriz de proyeccion
+	camera.updateProjectionMatrix();
 
 function update() {
 	// Cambiar propiedades entre frames
