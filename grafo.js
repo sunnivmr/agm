@@ -44,6 +44,8 @@ function init() {
 
 	// Control de camara
 	cameraControls = new THREE.OrbitCOntrols(camera, renderer.domElement);
+	cameraControls.target.set(0, 0, 0);
+	cameraControls.noZoom = false;
 
 
 	//Atender al eventos
