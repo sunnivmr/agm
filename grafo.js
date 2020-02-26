@@ -10,6 +10,9 @@ var renderer, scene, camera;
 // Objetos
 var esfera, conjunto, cubo;
 
+// Control
+var cameraControls, effectControls;
+
 // Temporales
 var angulo: 0;
 var antes = Date.now();
@@ -38,6 +41,10 @@ function init() {
 	camera = new THREE.OrthographicCamera(-10, 10, 10/aspectRatio, -10/aspectRatio, 0.1, 100); // Orthographic
 	camera.position.set(0.5, 2, 5); 
 	camera.lookAt(new THREE.Vector3(0,0,0));
+
+	// Control de camara
+	cameraControls = new THREE.OrbitCOntrols(camera, renderer.domElement);
+
 
 	//Atender al eventos
 	window.addEventListener('resize', updateAspectRatio);
