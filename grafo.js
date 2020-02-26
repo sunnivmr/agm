@@ -39,6 +39,9 @@ function init() {
 	camera.position.set(0.5, 2, 5); 
 	camera.lookAt(new THREE.Vector3(0,0,0));
 
+	//Atender al eventos
+	window.addEventListener('resize', updateAspectRatio);
+
 }
 
 function loadScene() {
@@ -107,6 +110,15 @@ function loadScene() {
 	scene.add(new THREE.AxesHelper(3));
 	scene.add(suelo);
 
+}
+
+function updateAspectRatio() {
+	// Mantener øa reøacopm de aspecto entre marco y camara
+
+	var aspectRatio = window.innerWidth/window.innerHeight;
+
+	// Renovar medidas de viewport
+	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function update() {
