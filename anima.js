@@ -90,6 +90,22 @@ function loadScene() {
 			objeto.scale.set(0.01, 0.01, 0.01);
 			objeto.rotation.y = Math.PI/2;
 			cubo.add(objeto);
+
+			// Movimiento interpolado del objeto
+			var salto = new TWEEN.Tween(objeto.position).
+							to( {x: [-0.2, -0.3, -0.5],
+								 y: [0.1, 0.3, 0.0],
+								 z: [0, 0, 0]}, 1000); // Thousand milliseconds in a second
+			salto.easing(TWEEN.Easing.Bounce.Out);
+			salto.interpolation(TWEEN.Interpolation.Bezier);
+			salto.start();
+
+			// Actualizar interpoladores
+			var volver = new TWEEN.Tween(objeto.position);
+			volver.to({x: 0, y: 0, z: 0}, 2000); // Two seconds
+			salto.chain(volver);
+			volder.chain(salto);
+
 		})
 
 	// Texto
