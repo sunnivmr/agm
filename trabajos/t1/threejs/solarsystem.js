@@ -23,53 +23,62 @@ sun = {
 mercury = {
     name: "Mercury",
     radius: 0.1,
-    xValue: 1,
+    xValue: 1.5,
     color: 'rgb(255,200,100)',
 };
 venus = {
     name: "Venus",
     radius: 0.2,
-    xValue: 2,
+    xValue: 2.3,
     color: 'rgb(255,100,0)'
 };
 earth = {
     name: "Earth",
     radius: 0.4,
-    xValue: 3,
+    xValue: 3.3,
     color: 'rgb(10,100,255)'
 };
 mars = {
     name: "Mars",
     radius: 0.2,
-    xValue: 4,
+    xValue: 4.3,
     color: 'rgb(255,10,50)'
 };
 jupiter = {
     name: "Jupiter",
     radius: 0.6,
-    xValue: 5,
+    xValue: 5.5,
     color: 'rgb(255,200,100)'
 };
 saturn = {
     name: "Saturn",
     radius: 0.5,
-    xValue: 6,
+    xValue: 7,
     color: 'rgb(200,200,100)'
 };
 uranus = {
     name: "Uranus",
     radius: 0.3,
-    xValue: 7,
+    xValue: 8.2,
     color: 'rgb(100,200,255)'
 };
 neptun = {
     name: "Neptun",
     radius: 0.3,
-    xValue: 8,
+    xValue: 9.2,
     color: 'rgb(50,50,255)'
 };
 
 var planets = [mercury, venus, earth, mars, jupiter, neptun, saturn, uranus];
+
+// Text
+var text = {
+    title: "The Solar System",
+    color: 'rgb(255, 255, 255)',
+    size: 0.5,
+    xValue: 1,
+}
+
 
 // Time
 var angle = 0;
@@ -146,9 +155,9 @@ function loadScene() {
     var fontLoader = new THREE.FontLoader();
     fontLoader.load('fonts/Yanone_Regular.json',
         function (font) {
-            var geoTexto = new THREE.TextGeometry(
-                'The Solar System', {
-                    size: 0.5,
+            var geoText = new THREE.TextGeometry(
+                text.title, {
+                    size: text.size,
                     height: 0.1,
                     curveSegments: 3,
                     style: "normal",
@@ -157,12 +166,15 @@ function loadScene() {
                     bevelSize: 0.04,
                     bevelEnabled: true
                 });
-            var matTexto = new THREE.MeshBasicMaterial({
-                color: 'yellow'
+            var matText = new THREE.MeshBasicMaterial({
+                color: text.color
             });
-            var texto = new THREE.Mesh(geoTexto, matTexto);
-            scene.add(texto);
-            texto.position.x = 1;
+            var newText = new THREE.Mesh(geoText, matText);
+
+            // Fixed position on text
+            scene.add(camera);
+            camera.add(newText);
+            newText.position.set(0, 0, -10);
         });
 
 
@@ -198,7 +210,6 @@ function setupGUI() {
     // Interface
     var gui = new dat.GUI();
     var folder = gui.addFolder("Interface Solar System");
-    folder.addColor(effectControls, "color").name("Color");
     folder.add(effectControls, "rotationSpeed", {
         Low: 0,
         Medium: 1,
@@ -222,9 +233,6 @@ function update() {
 
     // Change with user demand
     sun.rotation = angle * effectControls.rotationSpeed;
-    sun.material.setValues({
-        color: effectControls.color
-    });
 }
 
 function render() {
