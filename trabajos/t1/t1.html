@@ -9,10 +9,14 @@ Created by: Sunniva Mathea Runde
     <meta charset="UTF-8">
     <title>T1: The Solar System</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background-color: #000;
-            /*background-image: url(img/background.jpg);
-            */
+            background-image: url(img/stars.jpg);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -20,19 +24,29 @@ Created by: Sunniva Mathea Runde
             overflow: hidden;
         }
 
-        h1 {
+        .text {
+            position: absolute;
+            top: 3em;
+            left: 3em;
             font-family: 'Open Sans', Verdana, sans-serif;
-            margin-top: 2em;
             color: white;
-            text-align: center;
             background-color: rgba(0, 0, 0, 0);
+        }
+
+        p {
+            font-size: small;
+            margin-top: 0.5em;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>The Solar System</h1>
+    <div class="text">
+        <h1>The Solar System</h1>
+        <p>Applicaciónes Graphicos y Multimedia</p>
+        <p>Sunniva Mathea Runde, 2020</p>
+    </div>
     <!-- Container for the canvas -->
     <div id="container"></div>
 

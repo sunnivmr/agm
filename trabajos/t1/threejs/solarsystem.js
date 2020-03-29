@@ -98,7 +98,7 @@ function init() {
 
     // Render motor
     renderer = new THREE.WebGLRenderer({
-        alpha: false
+        alpha: true
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
@@ -166,17 +166,17 @@ function loadScene() {
 
 
 
-    var stars = createStars(90, 64);
+    var stars = createStars(1, 64);
     scene.add(stars);
 
     system.add(sun);
     system.add(stars);
     scene.add(system);
-    scene.add(new THREE.AxesHelper(3));
+    // scene.add(new THREE.AxesHelper(3));
 }
 
 function createStars(radius, segments) {
-    var texture = new THREE.TextureLoader().load('../img/background.jpg');
+    var texture = new THREE.TextureLoader().load('../t1/img/stars.jpg');
     var material = new THREE.MeshBasicMaterial({
         map: texture,
         side: THREE.BackSide
