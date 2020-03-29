@@ -22,50 +22,50 @@ sun = {
 
 mercury = {
     name: "Mercury",
-    radius: 0.1,
-    xValue: 1.5,
+    radius: 0.05,
+    xValue: 0.7,
     color: 'rgb(255,200,100)',
 };
 venus = {
     name: "Venus",
-    radius: 0.2,
-    xValue: 2.3,
+    radius: 0.1,
+    xValue: 1,
     color: 'rgb(255,100,0)'
 };
 earth = {
     name: "Earth",
-    radius: 0.4,
-    xValue: 3.3,
+    radius: 0.2,
+    xValue: 1.45,
     color: 'rgb(10,100,255)'
 };
 mars = {
     name: "Mars",
-    radius: 0.2,
-    xValue: 4.3,
+    radius: 0.1,
+    xValue: 2,
     color: 'rgb(255,10,50)'
 };
 jupiter = {
     name: "Jupiter",
-    radius: 0.6,
-    xValue: 5.5,
+    radius: 0.3,
+    xValue: 2.8,
     color: 'rgb(255,200,100)'
 };
 saturn = {
     name: "Saturn",
-    radius: 0.5,
-    xValue: 7,
+    radius: 0.25,
+    xValue: 3.5,
     color: 'rgb(200,200,100)'
 };
 uranus = {
     name: "Uranus",
-    radius: 0.3,
-    xValue: 8.2,
+    radius: 0.15,
+    xValue: 4,
     color: 'rgb(100,200,255)'
 };
 neptun = {
     name: "Neptun",
-    radius: 0.3,
-    xValue: 9.2,
+    radius: 0.15,
+    xValue: 4.5,
     color: 'rgb(50,50,255)'
 };
 
@@ -98,10 +98,10 @@ function init() {
 
     // Render motor
     renderer = new THREE.WebGLRenderer({
-        alpha: true
+        alpha: false
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
+    // renderer.setClearColor(0x000000, 0);
     document.getElementById('container').appendChild(renderer.domElement);
 
     // Scene
@@ -146,7 +146,7 @@ function loadScene() {
 
 
     // Sun
-    var sunSphere = new THREE.SphereGeometry(1, 30, 30);
+    var sunSphere = new THREE.SphereGeometry(0.45, 30, 30);
     var sunMaterial = new THREE.MeshBasicMaterial({
         color: sun.color
     });
@@ -164,9 +164,7 @@ function loadScene() {
         system.add(newPlanet);
     });
 
-
-
-    var stars = createStars(1, 64);
+    var stars = createStars(30, 64);
     scene.add(stars);
 
     system.add(sun);
