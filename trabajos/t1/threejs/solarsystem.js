@@ -141,14 +141,13 @@ function loadScene() {
 
     // The solar system object
     system = new THREE.Object3D();
-    system.position.y = 1;
+    system.position.y = 0;
 
     // Lights
     var ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     var pointLight = new THREE.PointLight(0xffffff, 0.7);
     scene.add(ambientLight);
     scene.add(pointLight);
-
 
     // Sun
     var sunSphere = new THREE.SphereGeometry(0.45, 30, 30);
@@ -163,17 +162,40 @@ function loadScene() {
     newPlanets = [];
 
     planets.forEach(function (planet) {
+        // Create sphere for each planet
+        // Add textures to planets
+        // Position planets correctly
+
         var planetSphere = new THREE.SphereGeometry(planet.radius, 30, 30);
         var planetTexture = new THREE.TextureLoader().load(planet.texture);
         var planetMaterial = new THREE.MeshPhongMaterial({
             color: planet.color,
             map: planetTexture
         });
+
         var newPlanet = new THREE.Mesh(planetSphere, planetMaterial);
         console.log(planet.name);
-        newPlanet.position.x = planet.xValue;
+
+        //newPlanet.position.x = planet.xValue;
+        newPlanet.translateX(planet.xValue);
+
         newPlanets.push(newPlanet);
-        system.add(newPlanet);
+        scene.add(newPlanet);
+
+        // Add orbit
+        var orbit = new THREE.Line(
+            new THREE.CircleGeometry(planet.radius, 90),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: .5,
+                side: THREE.BackSide
+            })
+        );
+        console.log(planet.radius);
+        orbit.geometry.vertices.shift();
+        orbit.rotation.x = THREE.Math.degToRad(90);
+        scene.add(orbit);
 
         // Add rings to Saturn
         if (planet.name == "Saturn") {
@@ -189,7 +211,6 @@ function loadScene() {
     scene.add(stars);
 
     system.add(sun);
-    system.add(stars);
     scene.add(system);
     // scene.add(new THREE.AxesHelper(3));
 }
@@ -266,17 +287,23 @@ function update() {
     angle += Math.PI / 9 * (now - before) / 1000;
     before = now;
 
-    // Rotate sun and planets
-    newPlanets.forEach(function (planet) {
-        planet.rotation.y = angle;
-    });
-
+    // Rotate sun and planets around themselves
     sun.rotation.y = angle;
+    rotatePlanets();
 
     // Change with user demand
 }
 
+function rotatePlanets() {
+    // Rotate planets around center
+
+    newPlanets.forEach(function (planet) {
+        planet.rotation.y += 0.01;
+    });
+}
+
 function render() {
+
     // Refresh loop
     requestAnimationFrame(render);
     update();
