@@ -97,9 +97,11 @@ function init() {
     // Initialize the motor, scene and the camera
 
     // Render motor
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({
+        alpha: false
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(new THREE.Color(0x000000));
+    renderer.setClearColor(0x000000, 0);
     document.getElementById('container').appendChild(renderer.domElement);
 
     // Scene
@@ -132,7 +134,18 @@ function loadScene() {
     system = new THREE.Object3D();
     system.position.y = 1;
 
-    // The sun
+    // Lighs
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    var pointLight1 = new THREE.PointLight(0xffffff, 0.5);
+    //var pointLight2 = new THREE.PointLight(0xffffff, 0.5);
+    //var pointLight3 = new THREE.PointLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    scene.add(pointLight1);
+    //scene.add(pointLight2);
+    //scene.add(pointLight3);
+
+
+    // Sun
     var sunSphere = new THREE.SphereGeometry(1, 30, 30);
     var sunMaterial = new THREE.MeshBasicMaterial({
         color: sun.color
@@ -142,7 +155,7 @@ function loadScene() {
     // Planets
     planets.forEach(function (planet) {
         var planetSphere = new THREE.SphereGeometry(planet.radius, 30, 30);
-        var planetMaterial = new THREE.MeshBasicMaterial({
+        var planetMaterial = new THREE.MeshPhongMaterial({
             color: planet.color
         });
         var newPlanet = new THREE.Mesh(planetSphere, planetMaterial);
@@ -151,36 +164,30 @@ function loadScene() {
         system.add(newPlanet);
     });
 
-    // Text
-    var fontLoader = new THREE.FontLoader();
-    fontLoader.load('fonts/Yanone_Regular.json',
-        function (font) {
-            var geoText = new THREE.TextGeometry(
-                text.title, {
-                    size: text.size,
-                    height: 0.1,
-                    curveSegments: 3,
-                    style: "normal",
-                    font: font,
-                    bevelThickness: 0.05,
-                    bevelSize: 0.04,
-                    bevelEnabled: true
-                });
-            var matText = new THREE.MeshBasicMaterial({
-                color: text.color
-            });
-            var newText = new THREE.Mesh(geoText, matText);
 
-            // Fixed position on text
-            scene.add(camera);
-            camera.add(newText);
-            newText.position.set(0, 0, -10);
-        });
 
+    var stars = createStars(90, 64);
+    scene.add(stars);
 
     system.add(sun);
+    system.add(stars);
     scene.add(system);
     scene.add(new THREE.AxesHelper(3));
+}
+
+function createStars(radius, segments) {
+    var texture = new THREE.TextureLoader().load('../img/background.jpg');
+    var material = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.BackSide
+    });
+    var sphere = new THREE.SphereGeometry(radius, segments, segments);
+    return new THREE.Mesh(sphere, material);
+
+    //return new THREE.Mesh(new THREE.SphereGeometry(radius, segments, segments), new THREE.MeshBasicMaterial({
+    // map: THREE.TextureLoader('../img/stars.jpg'),
+    // side: THREE.BackSide
+    //}));
 }
 
 function updateAspectRatio() {
