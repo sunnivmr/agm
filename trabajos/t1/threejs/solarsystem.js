@@ -17,7 +17,8 @@ sun = {
     name: "Sun",
     radius: 1,
     xValue: 0,
-    color: 'rgb(255,200,0)'
+    color: 'rgb(255,200,0)',
+    texture: '../t1/img/sun.jpg'
 };
 
 mercury = {
@@ -25,48 +26,56 @@ mercury = {
     radius: 0.05,
     xValue: 0.7,
     color: 'rgb(255,200,100)',
+    texture: '../t1/img/mercury.jpg'
 };
 venus = {
     name: "Venus",
     radius: 0.1,
     xValue: 1,
-    color: 'rgb(255,100,0)'
+    color: 'rgb(255,100,0)',
+    texture: '../t1/img/venus.jpg'
 };
 earth = {
     name: "Earth",
     radius: 0.2,
     xValue: 1.45,
-    color: 'rgb(10,100,255)'
+    color: 'rgb(10,100,255)',
+    texture: '../t1/img/earth.jpg'
 };
 mars = {
     name: "Mars",
     radius: 0.1,
     xValue: 2,
-    color: 'rgb(255,10,50)'
+    color: 'rgb(255,10,50)',
+    texture: '../t1/img/mars.jpg'
 };
 jupiter = {
     name: "Jupiter",
     radius: 0.3,
     xValue: 2.8,
-    color: 'rgb(255,200,100)'
+    color: 'rgb(255,200,100)',
+    texture: '../t1/img/jupiter.jpg'
 };
 saturn = {
     name: "Saturn",
-    radius: 0.25,
+    radius: 0.1,
     xValue: 3.5,
-    color: 'rgb(200,200,100)'
+    color: 'rgb(200,200,100)',
+    texture: '../t1/img/saturn.jpg'
 };
 uranus = {
     name: "Uranus",
     radius: 0.15,
     xValue: 4,
-    color: 'rgb(100,200,255)'
+    color: 'rgb(100,200,255)',
+    texture: '../t1/img/uranus.jpg'
 };
 neptun = {
     name: "Neptun",
     radius: 0.15,
     xValue: 4.5,
-    color: 'rgb(50,50,255)'
+    color: 'rgb(50,50,255)',
+    texture: '../t1/img/neptune.jpg'
 };
 
 var planets = [mercury, venus, earth, mars, jupiter, neptun, saturn, uranus];
@@ -101,7 +110,7 @@ function init() {
         alpha: false
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    // renderer.setClearColor(0x000000, 0);
+    renderer.setClearColor(0x000000, 0);
     document.getElementById('container').appendChild(renderer.domElement);
 
     // Scene
@@ -134,37 +143,49 @@ function loadScene() {
     system = new THREE.Object3D();
     system.position.y = 1;
 
-    // Lighs
+    // Lights
     var ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-    var pointLight1 = new THREE.PointLight(0xffffff, 0.5);
-    //var pointLight2 = new THREE.PointLight(0xffffff, 0.5);
-    //var pointLight3 = new THREE.PointLight(0xffffff, 0.5);
+    var pointLight = new THREE.PointLight(0xffffff, 0.7);
     scene.add(ambientLight);
-    scene.add(pointLight1);
-    //scene.add(pointLight2);
-    //scene.add(pointLight3);
+    scene.add(pointLight);
 
 
     // Sun
     var sunSphere = new THREE.SphereGeometry(0.45, 30, 30);
+    var sunTexture = new THREE.TextureLoader().load(sun.texture);
     var sunMaterial = new THREE.MeshBasicMaterial({
-        color: sun.color
+        color: sun.color,
+        map: sunTexture
     });
     sun = new THREE.Mesh(sunSphere, sunMaterial);
 
     // Planets
+    newPlanets = [];
+
     planets.forEach(function (planet) {
         var planetSphere = new THREE.SphereGeometry(planet.radius, 30, 30);
+        var planetTexture = new THREE.TextureLoader().load(planet.texture);
         var planetMaterial = new THREE.MeshPhongMaterial({
-            color: planet.color
+            color: planet.color,
+            map: planetTexture
         });
         var newPlanet = new THREE.Mesh(planetSphere, planetMaterial);
         console.log(planet.name);
         newPlanet.position.x = planet.xValue;
+        newPlanets.push(newPlanet);
         system.add(newPlanet);
+
+        // Add rings to Saturn
+        if (planet.name == "Saturn") {
+            var rings = createRings(planet.radius, 32);
+            rings.rotation.x = 5;
+            newPlanet.add(rings);
+        }
     });
 
-    var stars = createStars(30, 64);
+
+    // Background of stars
+    var stars = createStarSphere(30, 64);
     scene.add(stars);
 
     system.add(sun);
@@ -173,7 +194,9 @@ function loadScene() {
     // scene.add(new THREE.AxesHelper(3));
 }
 
-function createStars(radius, segments) {
+function createStarSphere(radius, segments) {
+    // Adds a background of stars to a sphere to visualize space
+
     var texture = new THREE.TextureLoader().load('../t1/img/stars.jpg');
     var material = new THREE.MeshBasicMaterial({
         map: texture,
@@ -181,11 +204,21 @@ function createStars(radius, segments) {
     });
     var sphere = new THREE.SphereGeometry(radius, segments, segments);
     return new THREE.Mesh(sphere, material);
+}
 
-    //return new THREE.Mesh(new THREE.SphereGeometry(radius, segments, segments), new THREE.MeshBasicMaterial({
-    // map: THREE.TextureLoader('../img/stars.jpg'),
-    // side: THREE.BackSide
-    //}));
+function createRings(radius, segments) {
+    // Adds rings to a planet
+
+    var texture = new THREE.TextureLoader().load('../t1/img/saturn_rings.png');
+    var material = new THREE.MeshBasicMaterial({
+        color: saturn.color,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.6
+    });
+    var rings = new THREE.RingGeometry(1.2 * radius, 2 * radius, 2 * segments, 5, 0, Math.PI * 2)
+    return new THREE.Mesh(rings, material);
+
 }
 
 function updateAspectRatio() {
@@ -233,11 +266,14 @@ function update() {
     angle += Math.PI / 9 * (now - before) / 1000;
     before = now;
 
-    // Rotate objects
+    // Rotate sun and planets
+    newPlanets.forEach(function (planet) {
+        planet.rotation.y = angle;
+    });
+
     sun.rotation.y = angle;
 
     // Change with user demand
-    sun.rotation = angle * effectControls.rotationSpeed;
 }
 
 function render() {
