@@ -33,7 +33,7 @@ venus = {
     name: "Venus",
     radius: 0.1,
     distance: 1,
-    rotationSpeed: 1.2,
+    rotationSpeed: 1.5,
     color: 'rgb(255,100,0)',
     texture: '../t1/img/venus.jpg'
 };
@@ -57,7 +57,7 @@ jupiter = {
     name: "Jupiter",
     radius: 0.3,
     distance: 2.8,
-    rotationSpeed: 0.2,
+    rotationSpeed: 0.25,
     color: 'rgb(255,200,100)',
     texture: '../t1/img/jupiter.jpg'
 };
@@ -65,7 +65,7 @@ saturn = {
     name: "Saturn",
     radius: 0.1,
     distance: 3.5,
-    rotationSpeed: 0.4,
+    rotationSpeed: 0.3,
     color: 'rgb(200,200,100)',
     texture: '../t1/img/saturn.jpg'
 };
@@ -73,7 +73,7 @@ uranus = {
     name: "Uranus",
     radius: 0.15,
     distance: 4,
-    rotationSpeed: 0.7,
+    rotationSpeed: 0.2,
     color: 'rgb(100,200,255)',
     texture: '../t1/img/uranus.jpg'
 };
@@ -81,7 +81,7 @@ neptun = {
     name: "Neptun",
     radius: 0.15,
     distance: 4.5,
-    rotationSpeed: 0.8,
+    rotationSpeed: 0.18,
     color: 'rgb(50,50,255)',
     texture: '../t1/img/neptune.jpg'
 };
