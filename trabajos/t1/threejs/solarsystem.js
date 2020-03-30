@@ -13,6 +13,8 @@ var sun;
 
 var mercury, venus, earth, mars, jupiter, neptun, saturn, uranus;
 
+var orbitLines = []; // For showing and hiding orbit lines
+
 sun = {
     name: "Sun",
     radius: 1,
@@ -193,7 +195,8 @@ function loadScene() {
         var orbitLine = new THREE.Line(
             geometry,
             new THREE.LineDashedMaterial({
-                color: 'white'
+                color: 'white',
+                visible: true
             })
         );
         orbitLine.rotation.x = Math.PI * 0.5;
@@ -202,6 +205,8 @@ function loadScene() {
         orbit = new THREE.Group();
         orbit.add(orbitLine);
         orbit.add(newPlanet);
+
+        orbitLines.push(orbitLine); // For showing and hiding orbit lines
 
         var orbitDir = new THREE.Group();
         orbitDir.rotation.x = 0.25;
@@ -212,7 +217,7 @@ function loadScene() {
     });
 
     // Background of stars
-    var stars = createStarSphere(30, 64);
+    var stars = createStarBackground(30, 64);
     scene.add(stars);
 
     system.add(sun);
@@ -220,7 +225,7 @@ function loadScene() {
     // scene.add(new THREE.AxesHelper(3));
 }
 
-function createStarSphere(radius, segments) {
+function createStarBackground(radius, segments) {
     // Adds a background of stars to a sphere to visualize space
 
     var texture = new THREE.TextureLoader().load('../t1/img/stars.jpg');
@@ -268,12 +273,14 @@ function setupGUI() {
     // Controls
     effectControls = {
         rotationSpeed: 1,
+        showOrbits: true,
     };
 
     // Interface
     var gui = new dat.GUI();
     var folder = gui.addFolder("Interface Solar System");
     folder.add(effectControls, "rotationSpeed", 1.0, 10.0, 0.1).name("Rotation speed");
+    folder.add(effectControls, "showOrbits").name("Show orbits");
 
 }
 
@@ -324,6 +331,9 @@ function update() {
     // Change with user demand
     rotatePlanets(effectControls.rotationSpeed);
 
+    orbitLines.forEach(function (orbitLine) {
+        orbitLine.visible = effectControls.showOrbits;
+    });
 }
 
 
