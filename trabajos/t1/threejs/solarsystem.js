@@ -267,18 +267,14 @@ function setupGUI() {
 
     // Controls
     effectControls = {
-        color: 'rgb(255,255,0)',
-        rotationSpeed: [],
+        rotationSpeed: 1,
     };
 
     // Interface
     var gui = new dat.GUI();
     var folder = gui.addFolder("Interface Solar System");
-    folder.add(effectControls, "rotationSpeed", {
-        Low: 0,
-        Medium: 1,
-        High: 2
-    }).name("Rotation speed");
+    folder.add(effectControls, "rotationSpeed", 1.0, 10.0, 0.1).name("Rotation speed");
+
 }
 
 function getRotationSpeeds() {
@@ -290,6 +286,17 @@ function getRotationSpeeds() {
     })
 
     return speeds;
+}
+
+function rotatePlanets(i) {
+    // Rotate planets and orbits around the sun
+
+    var speeds = getRotationSpeeds();
+
+    orbits.forEach(function (orbit) {
+        var orbitPosition = orbits.indexOf(orbit);
+        orbit.rotation.y = angle * speeds[orbitPosition] * i;
+    });
 }
 
 
@@ -311,15 +318,12 @@ function update() {
         planet.rotation.y = angle;
     });
 
-    // Rotate planets and orbits around the sun
-    var speeds = getRotationSpeeds();
-
-    orbits.forEach(function (orbit) {
-        var orbitPosition = orbits.indexOf(orbit);
-        orbit.rotation.y = angle * speeds[orbitPosition];
-    });
+    // Rotate orbits around the sun
+    rotatePlanets(1);
 
     // Change with user demand
+    rotatePlanets(effectControls.rotationSpeed);
+
 }
 
 
