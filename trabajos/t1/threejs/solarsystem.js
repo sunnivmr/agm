@@ -180,22 +180,6 @@ function loadScene() {
         newPlanet.translateX(planet.xValue);
 
         newPlanets.push(newPlanet);
-        scene.add(newPlanet);
-
-        // Add orbit
-        var orbit = new THREE.Line(
-            new THREE.CircleGeometry(planet.radius, 90),
-            new THREE.MeshBasicMaterial({
-                color: 0xffffff,
-                transparent: true,
-                opacity: .5,
-                side: THREE.BackSide
-            })
-        );
-        console.log(planet.radius);
-        orbit.geometry.vertices.shift();
-        orbit.rotation.x = THREE.Math.degToRad(90);
-        scene.add(orbit);
 
         // Add rings to Saturn
         if (planet.name == "Saturn") {
@@ -205,6 +189,8 @@ function loadScene() {
         }
     });
 
+    // Add orbits for each planet
+    addOrbits(newPlanets);
 
     // Background of stars
     var stars = createStarSphere(30, 64);
@@ -289,7 +275,6 @@ function update() {
 
     // Rotate sun and planets around themselves
     sun.rotation.y = angle;
-    rotatePlanets();
 
     // Change with user demand
 }
@@ -299,6 +284,25 @@ function rotatePlanets() {
 
     newPlanets.forEach(function (planet) {
         planet.rotation.y += 0.01;
+    });
+}
+
+function addOrbits(planets) {
+    // Add orbits
+
+    planets.forEach(function (planet) {
+        var material = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: .5,
+            side: THREE.BackSide
+        });
+        var circle = new THREE.CircleGeometry(planet.radius, 90);
+        var orbit = new THREE.Line(circle, material);
+        orbit.geometry.vertices.shift();
+        orbit.rotation.x = THREE.Math.degToRad(90);
+        orbit.add(planet);
+        system.add(orbit);
     });
 }
 
