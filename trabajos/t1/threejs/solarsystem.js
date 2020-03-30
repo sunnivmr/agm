@@ -16,7 +16,7 @@ var mercury, venus, earth, mars, jupiter, neptun, saturn, uranus;
 sun = {
     name: "Sun",
     radius: 1,
-    xValue: 0,
+    distance: 0,
     color: 'rgb(255,200,0)',
     texture: '../t1/img/sun.jpg'
 };
@@ -24,70 +24,69 @@ sun = {
 mercury = {
     name: "Mercury",
     radius: 0.05,
-    xValue: 0.7,
+    distance: 0.7,
+    rotationSpeed: 2,
     color: 'rgb(255,200,100)',
     texture: '../t1/img/mercury.jpg'
 };
 venus = {
     name: "Venus",
     radius: 0.1,
-    xValue: 1,
+    distance: 1,
+    rotationSpeed: 1.2,
     color: 'rgb(255,100,0)',
     texture: '../t1/img/venus.jpg'
 };
 earth = {
     name: "Earth",
     radius: 0.2,
-    xValue: 1.45,
+    distance: 1.45,
+    rotationSpeed: 1,
     color: 'rgb(10,100,255)',
     texture: '../t1/img/earth.jpg'
 };
 mars = {
     name: "Mars",
     radius: 0.1,
-    xValue: 2,
+    distance: 2,
+    rotationSpeed: 0.5,
     color: 'rgb(255,10,50)',
     texture: '../t1/img/mars.jpg'
 };
 jupiter = {
     name: "Jupiter",
     radius: 0.3,
-    xValue: 2.8,
+    distance: 2.8,
+    rotationSpeed: 0.2,
     color: 'rgb(255,200,100)',
     texture: '../t1/img/jupiter.jpg'
 };
 saturn = {
     name: "Saturn",
     radius: 0.1,
-    xValue: 3.5,
+    distance: 3.5,
+    rotationSpeed: 0.4,
     color: 'rgb(200,200,100)',
     texture: '../t1/img/saturn.jpg'
 };
 uranus = {
     name: "Uranus",
     radius: 0.15,
-    xValue: 4,
+    distance: 4,
+    rotationSpeed: 0.7,
     color: 'rgb(100,200,255)',
     texture: '../t1/img/uranus.jpg'
 };
 neptun = {
     name: "Neptun",
     radius: 0.15,
-    xValue: 4.5,
+    distance: 4.5,
+    rotationSpeed: 0.8,
     color: 'rgb(50,50,255)',
     texture: '../t1/img/neptune.jpg'
 };
 
 var planets = [mercury, venus, earth, mars, jupiter, neptun, saturn, uranus];
-
-// Text
-var text = {
-    title: "The Solar System",
-    color: 'rgb(255, 255, 255)',
-    size: 0.5,
-    xValue: 1,
-}
-
 
 // Time
 var angle = 0;
@@ -158,8 +157,10 @@ function loadScene() {
     });
     sun = new THREE.Mesh(sunSphere, sunMaterial);
 
-    // Planets
+
+    // Planets and orbits
     newPlanets = [];
+    orbits = [];
 
     planets.forEach(function (planet) {
         // Create sphere for each planet
@@ -172,25 +173,43 @@ function loadScene() {
             color: planet.color,
             map: planetTexture
         });
-
         var newPlanet = new THREE.Mesh(planetSphere, planetMaterial);
         console.log(planet.name);
-
-        //newPlanet.position.x = planet.xValue;
-        newPlanet.translateX(planet.xValue);
 
         newPlanets.push(newPlanet);
 
         // Add rings to Saturn
-        if (planet.name == "Saturn") {
+        if (planet.name === "Saturn") {
             var rings = createRings(planet.radius, 32);
             rings.rotation.x = 5;
             newPlanet.add(rings);
         }
-    });
 
-    // Add orbits for each planet
-    addOrbits(newPlanets);
+        // Add orbits to scene and add 
+        // planets to their respective orbits
+        var geometry = new THREE.CircleGeometry(planet.distance, 100);
+        geometry.vertices.shift();
+
+        var orbitLine = new THREE.Line(
+            geometry,
+            new THREE.LineDashedMaterial({
+                color: 'white'
+            })
+        );
+        orbitLine.rotation.x = Math.PI * 0.5;
+        newPlanet.position.set(planet.distance, 0, 0);
+
+        orbit = new THREE.Group();
+        orbit.add(orbitLine);
+        orbit.add(newPlanet);
+
+        var orbitDir = new THREE.Group();
+        orbitDir.rotation.x = 0.25;
+        orbitDir.add(orbit);
+
+        orbits.push(orbitDir);
+        scene.add(orbitDir);
+    });
 
     // Background of stars
     var stars = createStarSphere(30, 64);
@@ -262,6 +281,17 @@ function setupGUI() {
     }).name("Rotation speed");
 }
 
+function getRotationSpeeds() {
+    // Return list of rotation speeds of planets
+
+    var speeds = [];
+    planets.forEach(function (planet) {
+        speeds.push(planet.rotationSpeed);
+    })
+
+    return speeds;
+}
+
 
 function update() {
     // Change properties between frames
@@ -273,38 +303,25 @@ function update() {
     angle += Math.PI / 9 * (now - before) / 1000;
     before = now;
 
-    // Rotate sun and planets around themselves
+    // Rotate sun
     sun.rotation.y = angle;
+
+    // Rotate planets around themselves
+    newPlanets.forEach(function (planet) {
+        planet.rotation.y = angle;
+    });
+
+    // Rotate planets and orbits around the sun
+    var speeds = getRotationSpeeds();
+
+    orbits.forEach(function (orbit) {
+        var orbitPosition = orbits.indexOf(orbit);
+        orbit.rotation.y = angle * speeds[orbitPosition];
+    });
 
     // Change with user demand
 }
 
-function rotatePlanets() {
-    // Rotate planets around center
-
-    newPlanets.forEach(function (planet) {
-        planet.rotation.y += 0.01;
-    });
-}
-
-function addOrbits(planets) {
-    // Add orbits
-
-    planets.forEach(function (planet) {
-        var material = new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: .5,
-            side: THREE.BackSide
-        });
-        var circle = new THREE.CircleGeometry(planet.radius, 90);
-        var orbit = new THREE.Line(circle, material);
-        orbit.geometry.vertices.shift();
-        orbit.rotation.x = THREE.Math.degToRad(90);
-        orbit.add(planet);
-        system.add(orbit);
-    });
-}
 
 function render() {
 
